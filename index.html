@@ -70,7 +70,6 @@ button{
   background:#020617;
   border-radius:20px;
   overflow:hidden;
-
   backface-visibility:hidden;
 }
 
@@ -108,29 +107,158 @@ button{
 
 <script>
 
-/* 🔥 LISTE COMPLETE */
-const vehicles = {
-"Russie":["T-72","T-80","T-90","BMP-1","BMP-2","BMP-3","BTR-80","BTR-80A","T-14-ARMATA","BM-21","BM-27","BM-30","2S1","2S3","2S19","PANTSIR","TOR-M2","TUNGUSKA"],
-"USA":["M1-ABRAMS","HUMMER","STRYKER","AAV-7","LAV-25","APACHE","M-777","M-109","HIMARS"],
-"Allemagne":["LEOPARD-2","FUCHS","BOXER","LYNX","WIESEL"],
-"Royaume-Uni":["CHALLENGER-2","SCIMITAR","JACKAL","AS-90","AJAX"],
-"Italie":["ARIETE","CENTAURO","CENTAURO-II","FRECCIA","DARDO"],
-"Israël":["MAGACH-7C","NAMER","EITAN","ACHZARIT"],
-"Turquie":["COBRA","ALTAY","SABRA","AIFV"],
-"Espagne":["DRAGON","VEC","BMR-600","VAMTAC"],
-"Suisse":["EAGLE-IV","PIRANHA"],
-"Chine":["PTL-02","ZTZ-96","ZTZ-99","ZBD-04","ZBD-05"],
-"Japon":["TYPE-10"],
-"Corée":["K-1","K-2"],
-"Ukraine":["T-64-BULAT","DOZOR","VARTA"],
-"Inde":["ARJUN"],
-"Pologne":["ROSOMAK","ROSOMAK-RAK","XA-180","XA-360"]
+/* 🔥 👉 COLLE TA LISTE COMPLETE ICI */
+const imageList = [
+
+/* 🇷🇺 RUSSIE */
+"T-55-1.jpg","T-55-2.jpg","T-55-3.jpg",
+"T-62-1.jpg","T-62-2.jpg","T-62-3.jpg",
+"T-64BV-1.jpg","T-64BV-2.jpg","T-64BV-3.jpg",
+"T-72-1.jpg","T-72-2.jpg","T-72-3.jpg",
+"T-72-B3-1.jpg","T-72-B3-2.jpg","T-72-B3-3.jpg",
+"T-80-1.jpg","T-80-2.jpg","T-80-3.jpg",
+"T-80-BVM-1.jpg","T-80-BVM-2.jpg","T-80-BVM-3.jpg",
+"T-90-1.jpg","T-90-2.jpg","T-90-3.jpg",
+"T-90-MS-1.jpg","T-90-MS-2.jpg","T-90-MS-3.jpg",
+"T-14-ARMATA-1.jpg","T-14-ARMATA-2.jpg","T-14-ARMATA-3.jpg",
+"T-15-BALGUNIK-1.jpg","T-15-BALGUNIK-2.jpg","T-15-BALGUNIK-3.jpg",
+
+"BMP-1-1.jpg","BMP-1-2.jpg","BMP-1-3.jpg",
+"BMP-2-1.jpg","BMP-2-2.jpg","BMP-2-3.jpg",
+"BMP-3-1.jpg","BMP-3-2.jpg","BMP-3-3.jpg",
+"BMP-3-KORNET-T-1.jpg","BMP-3-KORNET-T-2.jpg","BMP-3-KORNET-T-3.jpg",
+"BMP3-KHRIZANTEMA-S-1.jpg","BMP3-KHRIZANTEMA-S-2.jpg","BMP3-KHRIZANTEMA-S-3.jpg",
+
+"BTR-60-1.jpg","BTR-60-2.jpg","BTR-60-3.jpg",
+"BTR-70-1.jpg","BTR-70-2.jpg","BTR-70-3.jpg",
+"BTR-80-1.jpg","BTR-80-2.jpg","BTR-80-3.jpg",
+"BTR-80A-1.jpg","BTR-80A-2.jpg","BTR-80A-3.jpg",
+
+"BRDM-2-1.jpg","BRDM-2-2.jpg","BRDM-2-3.jpg",
+"BRDM-2-RKH-1.jpg","BRDM-2-RKH-2.jpg","BRDM-2-RKH-3.jpg",
+"BRDM-2-AT5-1.jpg","BRDM-2-AT5-2.jpg","BRDM-2-AT5-3.jpg",
+
+"BM-21-1.jpg","BM-21-2.jpg","BM-21-3.jpg",
+"BM-27-1.jpg","BM-27-2.jpg","BM-27-3.jpg",
+"BM-30-1.jpg","BM-30-2.jpg","BM-30-3.jpg",
+
+"2S1-1.jpg","2S1-2.jpg","2S1-3.jpg",
+"2S3-1.jpg","2S3-2.jpg","2S3-3.jpg",
+"2S5-1.jpg","2S5-2.jpg","2S5-3.jpg",
+"2S7-1.jpg","2S7-2.jpg","2S7-3.jpg",
+"2S19-1.jpg","2S19-2.jpg","2S19-3.jpg",
+"2S35-1.jpg","2S35-2.jpg","2S35-3.jpg",
+
+"PANTSIR-1.jpg","PANTSIR-2.jpg","PANTSIR-3.jpg",
+"TOR-M2-1.jpg","TOR-M2-2.jpg","TOR-M2-3.jpg",
+"TUNGUSKA-1.jpg","TUNGUSKA-2.jpg","TUNGUSKA-3.jpg",
+
+"MI-24-1.jpg","MI-24-2.jpg","MI-24-3.jpg",
+"MI-28-1.jpg","MI-28-2.jpg","MI-28-3.jpg",
+
+/* 🇺🇸 USA */
+"M1-ABRAMS-1.jpg","M1-ABRAMS-2.jpg","M1-ABRAMS-3.jpg",
+"HUMMER-1.jpg","HUMMER-2.jpg","HUMMER-3.jpg",
+"STRYKER-1.jpg","STRYKER-2.jpg","STRYKER-3.jpg",
+"AAV-7-1.jpg","AAV-7-2.jpg","AAV-7-3.jpg",
+"LAV-25-1.png.jpg","LAV-25-2.jpg","LAV-25-3.jpg",
+"APACHE-1.jpg","APACHE-2.jpg","APACHE-3.jpg",
+"HIMARS-1.jpg","HIMARS-2.jpg","HIMARS-3.jpg",
+
+/* 🇩🇪 ALLEMAGNE */
+"LEOPARD-2-1.jpg","LEOPARD-2-2.jpg","LEOPARD-2-3.jpg",
+"FUCHS-1.jpg","FUCHS-2.jpg","FUCHS-3.jpg",
+"BOXER-1.jpg","BOXER-2.png.jpg","BOXER-3.jpg",
+"LYNX-1.jpg","LYNX-2.jpg","LYNX-3.jpg",
+"WIESEL-1.jpg","WIESEL-2.jpg","WIESEL-3.jpg",
+
+/* 🇬🇧 UK */
+"CHALLENGER-2-1.jpg","CHALLENGER-2-2.jpg","CHALLENGER-2-3.jpg",
+"SCIMITAR-1.jpg","SCIMITAR-2.jpg","SCIMITAR-3.jpg",
+"JACKAL-1.jpg","JACKAL-2.jpg","JACKAL-3.jpg",
+"AS-90-1.jpg","AS-90-2.jpg","AS-90-3.jpg",
+"AJAX-1.jpg","AJAX-2.jpg","AJAX-3.jpg",
+
+/* 🇮🇹 ITALIE */
+"ARIETE-1.jpg","ARIETE-2.jpg","ARIETE-3.jpg",
+"CENTAURO-1.jpg","CENTAURO-2.jpg","CENTAURO-3.jpg",
+"CENTAURO-II-1.jpg","CENTAURO-II-2.jpg","CENTAURO-II-3.jpg",
+"FRECCIA-1.jpg","FRECCIA-2.jpg","FRECCIA-3.jpg",
+"DARDO-1.jpg","DARDO-2.jpg","DARDO-3.jpg",
+
+/* 🇮🇱 ISRAEL */
+"MAGACH-7C-1.jpg","MAGACH-7C-2.jpg","MAGACH-7C-3.jpg",
+"NAMER-1.jpg","NAMER-2.jpg","NAMER-3.jpg",
+"EITAN-1.jpg","EITAN-2.jpg","EITAN-3.jpg",
+"ACHZARIT-1.jpg","ACHZARIT-2.jpg","ACHZARIT-3.jpg",
+
+/* 🇹🇷 TURQUIE */
+"COBRA-1.jpg","COBRA-2.jpg","COBRA-3.jpg",
+"ALTAY-1.jpg","ALTAY-2.jpg","ALTAY-3.jpg",
+"SABRA-1.jpg","SABRA-2.jpg","SABRA-3.jpg",
+"AIFV-1.jpg","AIFV-2.jpg","AIFV-3.jpg",
+
+/* 🇪🇸 ESPAGNE */
+"DRAGON-1.jpg","DRAGON-2.jpg","DRAGON-3.jpg",
+"VEC-1.png.jpg","VEC-2.jpg","VEC-3.jpg",
+"BMR-600-1.jpg","BMR-600-2.jpg","BMR-600-3.jpg",
+"VAMTAC-1.jpg","VAMTAC-2.jpg","VAMTAC-3.jpg",
+
+/* 🇨🇭 SUISSE */
+"EAGLE-IV-1.jpg","EAGLE-IV-2.jpg","EAGLE-IV-3.jpg",
+"PIRANHA-1.jpg","PIRANHA-2.jpg","PIRANHA-3.jpg",
+
+/* 🇨🇳 CHINE */
+"PTL-02-1.jpg","PTL-02-2.jpg","PTL-02-3.jpg",
+"ZTZ-96-1.jpg","ZTZ-96-2.jpg","ZTZ-96-3.jpg",
+"ZTZ-99-1.jpg","ZTZ-99-2.jpg","ZTZ-99-3.jpg",
+"ZBD-04-1.jpg","ZBD-04-2.jpg","ZBD-04-3.jpg",
+"ZBD-05-1.jpg","ZBD-05-2.png.jpg","ZBD-05-3.jpg",
+
+/* 🇯🇵 JAPON */
+"TYPE-10-1.jpg","TYPE-10-2.jpg","TYPE-10-3.jpg",
+
+/* 🇰🇷 COREE */
+"K-1-1.jpg","K-1-2.jpg","K-1-3.jpg",
+"K-2-1.jpg","K-2-2.jpg","K-2-3.jpg",
+
+/* 🇺🇦 UKRAINE */
+"T-64-BULAT-1.jpg","T-64-BULAT-2.jpg","T-64-BULAT-3.jpg",
+"DOZOR-1.jpg","DOZOR-2.jpg","DOZOR-3.jpg",
+"VARTA-1.jpg","VARTA-2.jpg","VARTA-3.jpg",
+
+/* 🇮🇳 INDE */
+"ARJUN-1.jpg","ARJUN-2.jpg","ARJUN-3.jpg",
+
+/* 🇵🇱 POLOGNE */
+"ROSOMAK-1.jpg","ROSOMAK-2.jpg","ROSOMAK-3.jpg",
+"ROSOMAK-RAK-1.jpg",
+"XA-180-1.jpg","XA-180-2.jpg","XA-180-3.jpg",
+"XA-360
+
+];
+
+/* 🧠 TRANSFORM IMAGE → CARTE */
+const cards = imageList.map(img=>{
+  const name = img.split("-").slice(0,-1).join("-");
+  return {
+    name:name,
+    img:"img-vehicule/" + img,
+    weight:1
+  };
+});
+
+/* 🌍 PAYS (approx simple basé sur nom) */
+const countryMap = {
+"Russie":["T-","BMP","BTR"],
+"USA":["M1-","HUMMER","STRYKER"],
+"Allemagne":["LEOPARD","FUCHS"],
 };
 
 /* MENU */
 const menu=document.getElementById("menu");
 
-Object.keys(vehicles).forEach(c=>{
+Object.keys(countryMap).forEach(c=>{
   const l=document.createElement("label");
   l.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
   menu.appendChild(l);
@@ -140,70 +268,42 @@ function toggleMenu(){
   menu.style.display = menu.style.display==="flex"?"none":"flex";
 }
 
-document.addEventListener("click",(e)=>{
-  if(!menu.contains(e.target)&&e.target.innerText!=="🌍 Pays"){
-    menu.style.display="none";
-  }
-});
+/* FILTRE */
+function getFiltered(){
 
-/* 🔥 BUILD LIST */
-let cards=[];
-
-function buildCards(){
-  cards=[];
   const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
 
-  selected.forEach(c=>{
-    vehicles[c].forEach(v=>{
-      cards.push({
-        name:v,
-        weight:1
-      });
+  return cards.filter(c=>{
+    return selected.some(country=>{
+      return countryMap[country].some(key=>c.name.includes(key));
     });
   });
 }
 
 /* 🧠 RANDOM INTELLIGENT */
-function getWeighted(){
+function getWeighted(list){
   let total=0;
-  cards.forEach(c=>total+=c.weight);
+  list.forEach(c=>total+=c.weight);
 
   let r=Math.random()*total;
 
-  for(let c of cards){
+  for(let c of list){
     if(r<c.weight) return c;
     r-=c.weight;
   }
 }
 
-/* LOAD IMAGE SAFE */
+/* LOAD */
 function load(){
 
   card.classList.remove("flip");
 
-  function tryLoad(){
+  const list = getFiltered();
+  const c = getWeighted(list);
 
-    const c=getWeighted();
-    const i=Math.floor(Math.random()*3)+1;
-
-    const path=`img-vehicule/${c.name}-${i}.jpg`;
-
-    const test=new Image();
-
-    test.onload=()=>{
-      img.src=path;
-      back.textContent=c.name;
-      current=c;
-    };
-
-    test.onerror=()=>{
-      tryLoad();
-    };
-
-    test.src=path;
-  }
-
-  tryLoad();
+  img.src = c.img;
+  back.textContent = c.name;
+  current = c;
 }
 
 /* BUTTONS */
@@ -219,7 +319,6 @@ function bad(){
 
 /* START */
 function next(){
-  buildCards();
   load();
 }
 
