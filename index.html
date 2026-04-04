@@ -6,236 +6,175 @@
 <title>Flashcards Véhicules</title>
 
 <style>
-*{box-sizing:border-box;font-family:Arial}
-
 body{
   margin:0;
   background:#0f172a;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  color:white;
+  text-align:center;
+  font-family:Arial;
 }
 
-/* HEADER */
-header{
-  width:100%;
-  background:#020617;
-  padding:10px;
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-
-button{
-  border:none;
-  border-radius:12px;
-  padding:10px 16px;
-  cursor:pointer;
-  font-weight:600;
-}
-
-.start{background:#0284c7;color:white}
-.good{background:#16a34a}
-.bad{background:#dc2626}
-
-/* CARD */
-.card{
-  width:90vw;
-  max-width:420px;
+img{
+  width:90%;
+  max-width:400px;
   height:60vh;
-  margin-top:20px;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:.5s;
-}
-.card.flip{transform:rotateY(180deg)}
-
-.face{
-  position:absolute;
-  width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#020617;
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.face img{
-  width:100%;
-  height:100%;
   object-fit:contain;
 }
 
-.back{
-  transform:rotateY(180deg);
-  font-size:24px;
+button{
+  padding:12px;
+  margin:10px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
 
-/* CONTROLS */
-#controls{
-  display:flex;
-  gap:10px;
-  margin:20px;
-  width:90%;
-  max-width:420px;
-}
-#controls button{
-  flex:1;
-  padding:14px;
-}
+.good{background:#16a34a}
+.bad{background:#dc2626}
 </style>
 </head>
 
 <body>
 
-<header>
-  <button class="start" onclick="start()">▶ Démarrer</button>
-</header>
+<h1>Flashcards Véhicules</h1>
 
-<div class="card" id="card">
-  <div class="face">
-    <img id="img">
-  </div>
-  <div class="face back" id="back"></div>
-</div>
+<img id="img">
+<h2 id="name"></h2>
 
-<div id="controls">
-  <button class="bad" onclick="bad()">❌</button>
-  <button class="good" onclick="good()">✅</button>
-</div>
+<br>
+
+<button onclick="show()">👁 Voir réponse</button>
+<br>
+<button class="bad" onclick="next()">❌ Mauvais</button>
+<button class="good" onclick="next()">✅ Bon</button>
 
 <script>
 
-/* 🚀 LISTE COMPLETE */
-const vehicles = {
+/* 🚀 LISTE COMPLETE STABLE */
+const vehicles = [
 
-"Russie":[
-"T-72","T-80","T-90","BMP-1","BMP-2","BMP-3","BTR-80","BTR-80A",
-"T-14-ARMATA","T-15-BALGUNIK","BM-21","BM-27","BM-30","2S1","2S3","2S5","2S7","2S19","2S35",
-"ZU-23-2","ZSU-23-4-SHILKA","TUNGUSKA","PANTSIR","TOR-M2","MI-24","MI-28"
-],
+/* RUSSIE */
+{name:"T-55",img:"img-vehicule/T-55-1.jpg"},
+{name:"T-62",img:"img-vehicule/T-62-1.jpg"},
+{name:"T-64BV",img:"img-vehicule/T-64BV-1.jpg"},
+{name:"T-72",img:"img-vehicule/T-72-1.jpg"},
+{name:"T-80",img:"img-vehicule/T-80-1.jpg"},
+{name:"T-90",img:"img-vehicule/T-90-1.jpg"},
+{name:"BMP-1",img:"img-vehicule/BMP-1-1.jpg"},
+{name:"BMP-2",img:"img-vehicule/BMP-2-1.jpg"},
+{name:"BMP-3",img:"img-vehicule/BMP-3-1.jpg"},
+{name:"BTR-80",img:"img-vehicule/BTR-80-1.jpg"},
+{name:"BTR-80A",img:"img-vehicule/BTR-80A-1.jpg"},
+{name:"T-14-ARMATA",img:"img-vehicule/T-14-ARMATA-1.jpg"},
+{name:"BM-21",img:"img-vehicule/BM-21-1.jpg"},
+{name:"BM-27",img:"img-vehicule/BM-27-1.jpg"},
+{name:"BM-30",img:"img-vehicule/BM-30-1.jpg"},
+{name:"2S1",img:"img-vehicule/2S1-1.jpg"},
+{name:"2S3",img:"img-vehicule/2S3-1.jpg"},
+{name:"2S19",img:"img-vehicule/2S19-1.jpg"},
+{name:"PANTSIR",img:"img-vehicule/PANTSIR-1.jpg"},
+{name:"TOR-M2",img:"img-vehicule/TOR-M2-1.jpg"},
+{name:"TUNGUSKA",img:"img-vehicule/TUNGUSKA-1.jpg"},
 
-"USA":[
-"M1-ABRAMS","HUMMER","STRYKER","AAV-7","LAV-25","APACHE","M-777","M-109","HIMARS"
-],
+/* USA */
+{name:"M1-ABRAMS",img:"img-vehicule/M1-ABRAMS-1.jpg"},
+{name:"HUMMER",img:"img-vehicule/HUMMER-1.jpg"},
+{name:"STRYKER",img:"img-vehicule/STRYKER-1.jpg"},
+{name:"AAV-7",img:"img-vehicule/AAV-7-1.jpg"},
+{name:"LAV-25",img:"img-vehicule/LAV-25-1.png.jpg"},
+{name:"APACHE",img:"img-vehicule/APACHE-1.jpg"},
+{name:"M-777",img:"img-vehicule/M-777-1.jpg"},
+{name:"M-109",img:"img-vehicule/M-109-1.jpg"},
+{name:"HIMARS",img:"img-vehicule/HIMARS-1.jpg"},
 
-"Allemagne":[
-"LEOPARD-2","FUCHS","BOXER","LYNX","WIESEL"
-],
+/* ALLEMAGNE */
+{name:"LEOPARD-2",img:"img-vehicule/LEOPARD-2-1.jpg"},
+{name:"FUCHS",img:"img-vehicule/FUCHS-1.jpg"},
+{name:"BOXER",img:"img-vehicule/BOXER-1.jpg"},
+{name:"LYNX",img:"img-vehicule/LYNX-1.jpg"},
+{name:"WIESEL",img:"img-vehicule/WIESEL-1.jpg"},
 
-"Royaume-Uni":[
-"CHALLENGER-2","SCIMITAR","JACKAL","AS-90","AJAX"
-],
+/* UK */
+{name:"CHALLENGER-2",img:"img-vehicule/CHALLENGER-2-1.jpg"},
+{name:"SCIMITAR",img:"img-vehicule/SCIMITAR-1.jpg"},
+{name:"JACKAL",img:"img-vehicule/JACKAL-1.jpg"},
+{name:"AS-90",img:"img-vehicule/AS-90-1.jpg"},
+{name:"AJAX",img:"img-vehicule/AJAX-1.jpg"},
 
-"Italie":[
-"ARIETE","CENTAURO","CENTAURO-II","FRECCIA","DARDO"
-],
+/* ITALIE */
+{name:"ARIETE",img:"img-vehicule/ARIETE-1.jpg"},
+{name:"CENTAURO",img:"img-vehicule/CENTAURO-1.jpg"},
+{name:"CENTAURO-II",img:"img-vehicule/CENTAURO-II-1.jpg"},
+{name:"FRECCIA",img:"img-vehicule/FRECCIA-1.jpg"},
+{name:"DARDO",img:"img-vehicule/DARDO-1.jpg"},
 
-"Israël":[
-"MAGACH-7C","NAMER","EITAN","ACHZARIT"
-],
+/* ISRAEL */
+{name:"MAGACH-7C",img:"img-vehicule/MAGACH-7C-1.jpg"},
+{name:"NAMER",img:"img-vehicule/NAMER-1.jpg"},
+{name:"EITAN",img:"img-vehicule/EITAN-1.jpg"},
+{name:"ACHZARIT",img:"img-vehicule/ACHZARIT-1.jpg"},
 
-"Turquie":[
-"COBRA","ALTAY","SABRA","AIFV"
-],
+/* TURQUIE */
+{name:"COBRA",img:"img-vehicule/COBRA-1.jpg"},
+{name:"ALTAY",img:"img-vehicule/ALTAY-1.jpg"},
+{name:"SABRA",img:"img-vehicule/SABRA-1.jpg"},
+{name:"AIFV",img:"img-vehicule/AIFV-1.jpg"},
 
-"Espagne":[
-"DRAGON","VEC","BMR-600","VAMTAC"
-],
+/* ESPAGNE */
+{name:"DRAGON",img:"img-vehicule/DRAGON-1.jpg"},
+{name:"VEC",img:"img-vehicule/VEC-1.png.jpg"},
+{name:"BMR-600",img:"img-vehicule/BMR-600-1.jpg"},
+{name:"VAMTAC",img:"img-vehicule/VAMTAC-1.jpg"},
 
-"Suisse":[
-"EAGLE-IV","PIRANHA"
-],
+/* SUISSE */
+{name:"EAGLE-IV",img:"img-vehicule/EAGLE-IV-1.jpg"},
+{name:"PIRANHA",img:"img-vehicule/PIRANHA-1.jpg"},
 
-"Chine":[
-"PTL-02","ZTZ-96","ZTZ-99","ZBD-04","ZBD-05"
-],
+/* CHINE */
+{name:"PTL-02",img:"img-vehicule/PTL-02-1.jpg"},
+{name:"ZTZ-96",img:"img-vehicule/ZTZ-96-1.jpg"},
+{name:"ZTZ-99",img:"img-vehicule/ZTZ-99-1.jpg"},
+{name:"ZBD-04",img:"img-vehicule/ZBD-04-1.jpg"},
+{name:"ZBD-05",img:"img-vehicule/ZBD-05-1.jpg"},
 
-"Japon":[
-"TYPE-10"
-],
+/* JAPON */
+{name:"TYPE-10",img:"img-vehicule/TYPE-10-1.jpg"},
 
-"Corée":[
-"K-1","K-2","MERKAVA-IV"
-],
+/* COREE */
+{name:"K-1",img:"img-vehicule/K-1-1.jpg"},
+{name:"K-2",img:"img-vehicule/K-2-1.jpg"},
 
-"Ukraine":[
-"T-64-BULAT","DOZOR","VARTA"
-],
+/* UKRAINE */
+{name:"T-64-BULAT",img:"img-vehicule/T-64-BULAT-1.jpg"},
+{name:"DOZOR",img:"img-vehicule/DOZOR-1.jpg"},
+{name:"VARTA",img:"img-vehicule/VARTA-1.jpg"},
 
-"Inde":[
-"ARJUN"
-],
+/* INDE */
+{name:"ARJUN",img:"img-vehicule/ARJUN-1.jpg"},
 
-"Pologne":[
-"ROSOMAK","ROSOMAK-RAK","XA-180","XA-360"
-]
+/* POLOGNE */
+{name:"ROSOMAK",img:"img-vehicule/ROSOMAK-1.jpg"},
+{name:"ROSOMAK-RAK",img:"img-vehicule/ROSOMAK-RAK-1.jpg"},
+{name:"XA-180",img:"img-vehicule/XA-180-1.jpg"},
+{name:"XA-360",img:"img-vehicule/XA-360-1.jpg"}
 
-};
-
-/* 🔥 GENERATEUR FIX */
-let baseList = [];
-
-for(const country in vehicles){
-  baseList = baseList.concat(vehicles[country]);
-}
-
-/* RANDOM */
-function getRandomVehicle(){
-  return baseList[Math.floor(Math.random()*baseList.length)];
-}
+];
 
 let current;
 
-const img=document.getElementById("img");
-const back=document.getElementById("back");
-const card=document.getElementById("card");
-
-/* LOAD */
-function load(){
-
-  card.classList.remove("flip");
-  img.src = "";
-
-  function tryLoad(){
-
-    const v = getRandomVehicle();
-    const i = Math.floor(Math.random()*3)+1;
-
-    const path = `img-vehicule/${v}-${i}.jpg`;
-
-    const test = new Image();
-
-    test.onload = ()=>{
-      img.src = path;
-      back.textContent = v;
-      current = v;
-    };
-
-    test.onerror = ()=>{
-      tryLoad(); // 🔁 on change si image inexistante
-    };
-
-    test.src = path;
-  }
-
-  tryLoad();
+function next(){
+  const v = vehicles[Math.floor(Math.random()*vehicles.length)];
+  current = v;
+  document.getElementById("img").src = v.img;
+  document.getElementById("name").textContent = "";
 }
 
-/* START */
-function start(){
-  load();
+function show(){
+  document.getElementById("name").textContent = current.name;
 }
 
-/* FLIP */
-card.onclick=()=>card.classList.toggle("flip");
-
-/* BUTTONS */
-function good(){load();}
-function bad(){load();}
+next();
 
 </script>
 
