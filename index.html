@@ -127,46 +127,74 @@ button{
 
 <script>
 
-/* VEHICULES CORRIGÉS (match fichiers) */
-const vehicles={
+/* 👉 GARDE TA LISTE ICI */
+const vehicles = {
+
 "Russie":[
-"T-72","T-80","T-90",
+"T-55","T-62","T-64BV","T-72","T-80","T-90",
 "BMP-T","BMP-T2","BMP-T72",
 "BMP-1","BMP-2","BMP-3",
 "BMD-1","BMD-2","BMD-3","BMD-4",
-"BTR-80","BTR-80A",
+"BRDM-2","BRDM-2-RKH",
+"BRM-1","BRM-3KRYS",
+"BTR-60","BTR-70","BTR-80","BTR-80A",
+"BTR-KURGANETS",
+"BTR-TAIFUN-K","BTR-TAIFUN-U","BTR-TAIFUN-K-VDV",
+"MTLB",
 "T-72-B3","T-80-BVM","T-90-MS",
-"MI-24","MI-28","TUNGUSKA","PANTSIR"
+"MI-24","MI-28","HOKUM",
+"122-D-30","130-M-46","2-A-65",
+"2S1","2S3","2S5","2S7","2S19","2S35",
+"GAZ-TIGR","T-14-ARMATA","T-15-BALGUNIK",
+"BMP-BUMERANG",
+"MDK-2","PZM","BAT-2","GMZ","IMR-2",
+"MTU-72","PTS-2","TMM-3","TMM-6","PMM-2",
+"SPG-9","100-T-12","SPRUT-B",
+"BRDM-2-AT5","BMP3-KHRIZANTEMA-S","BMP-3-KORNET-T",
+"SHTURM-S","BMO-T",
+"BM-21","BM-27","BM-30",
+"TULPAN","NONA",
+"ZU-23-2","ZSU-23-4-SHILKA",
+"GAINFULL","GECKO","GADFLY","GROUSE",
+"TUNGUSKA","PANTSIR","TOR-M2","GASKIN","GOPHER"
 ],
+
 "USA":[
 "M1-ABRAMS","HUMMER","STRYKER","M-113",
-"AAV-7","LAV-25","APACHE","HIMARS"
+"AAV-7","LAV-25",
+"AH-1-COBRA","APACHE",
+"M-777","M-109",
+"JLTV","MATV","MAXXPRO","COUGAR",
+"M9-ACE","M-104-WOLVERINE",
+"RIBBON-BRIDGE","106-M-40-A1","M-1134",
+"M-270","HIMARS","152-D20","2-A-36","AVENGER"
 ],
+
 "Allemagne":[
-"LEOPARD-2","FUCHS","WIESEL","BOXER"
+"LEOPARD-2","WIESEL","FENNEK","FUCHS","BOXER",
+"PHZ-2000","DINGO-2","LYNX","DACHS","LEGUAN",
+"M3-AMPHIBOUS-RIG"
 ],
+
 "Royaume-Uni":[
-"CHALLENGER-2","SCIMITAR","JACKAL"
+"CHALLENGER-2","SCIMITAR","JACKAL",
+"VIKING(VHM)","LIGHT-GUN","FH-70","AS-90",
+"OCELOT","AJAX","TERRIER"
 ],
+
 "Italie":[
-"ARIETE","CENTAURO","IVECO"
+"ARIETE","CENTAURO","CENTAURO-II","IVECO",
+"MANGUSTA","FRECCIA","DARDO","BURATINO"
 ],
+
 "Israël":[
-"MAGACH-7C","NAMER"
+"MAGACH-7C","NAMER","EITAN",
+"NAGMASHON","ACHZARIT","NAKPADON",
+"PEREH-TAMUZ"
 ],
+
 "Turquie":[
-"COBRA","ALTAY"
-],
-"Espagne":[
-"DRAGON","VEC","BMR-600"
-],
-"Suisse":[
-"EAGLE-IV"
-],
-"Chine":[
-"PTL-02","ZTZ-96","ZTZ-99"
-]
-};
+"SAB
 
 /* MENU */
 const menu=document.getElementById("countryMenu");
@@ -186,12 +214,12 @@ document.addEventListener("click",(e)=>{
   }
 });
 
-/* CARDS */
-const cards=[];
+/* 🔥 CARTES */
+let allCards=[];
 for(const country in vehicles){
   vehicles[country].forEach(v=>{
     for(let i=1;i<=3;i++){
-      cards.push({
+      allCards.push({
         img:`img-vehicule/${v}-${i}.jpg`,
         name:v,
         country,
@@ -201,55 +229,93 @@ for(const country in vehicles){
   });
 }
 
-/* LOGIQUE */
-let current;
-const card=document.getElementById("card");
-const img=document.getElementById("img");
-const back=document.getElementById("back");
+/* 🔥 FILE */
+let queue=[];
 
+function generateQueue(){
+  queue=[];
+  for(let i=0;i<6;i++){
+    queue.push(getRandom());
+  }
+}
+
+/* RANDOM */
 function getRandom(){
   let pool=[];
-  cards.forEach(c=>{
+  allCards.forEach(c=>{
     for(let i=0;i<c.weight;i++) pool.push(c);
   });
   return pool[Math.floor(Math.random()*pool.length)];
 }
 
-function start(){load();}
+/* DOM */
+let current;
+const card=document.getElementById("card");
+const img=document.getElementById("img");
+const back=document.getElementById("back");
 
-function load(){
-  card.classList.remove("flip");
-  current=getRandom();
-  loadImage(current);
+/* START */
+function start(){
+  generateQueue();
+  loadNext();
 }
 
-/* 🔥 ANTI BUG TOTAL */
-function loadImage(cardObj){
-  img.src=cardObj.img;
+/* LOAD */
+function loadNext(){
+  if(queue.length<3) generateQueue();
+  current=queue.shift();
+  tryLoadImage(current);
+}
 
-  img.onload=()=>{
+/* 🔥 IMAGE SAFE */
+function tryLoadImage(cardObj){
+  const test=new Image();
+
+  test.onload=()=>{
+    img.src=cardObj.img;
     back.textContent=cardObj.name;
+    preloadNext();
   };
 
-  img.onerror=()=>{
-    console.log("Image ignorée:",cardObj.img);
-    current=getRandom();
-    loadImage(current);
+  test.onerror=()=>{
+    console.log("❌ ignorée:",cardObj.img);
+    loadNext();
   };
+
+  test.src=cardObj.img;
 }
 
+/* PRELOAD */
+function preloadNext(){
+  queue.slice(0,5).forEach(c=>{
+    const pre=new Image();
+    pre.src=c.img;
+  });
+}
+
+/* FLIP */
 card.onclick=()=>card.classList.toggle("flip");
 
+/* BON */
 function good(){
   current.weight=Math.max(1,current.weight-1);
-  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,400);},600);
+  next();
 }
 
+/* MAUVAIS */
 function bad(){
   current.weight+=2;
-  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,400);},600);
+  next();
 }
 
+function next(){
+  setTimeout(()=>{
+    card.classList.remove("flip");
+    setTimeout(loadNext,300);
+  },400);
+}
+
+/* FULLSCREEN */
 function toggleFullscreen(){
   if(!document.fullscreenElement){
     document.documentElement.requestFullscreen();
