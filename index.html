@@ -3,84 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcards Véhicules</title>
+<title>Flashcards Véhicules PRO</title>
 
 <style>
+*{box-sizing:border-box;font-family:Arial}
+
 body{
   margin:0;
   background:#0f172a;
-  color:white;
-  text-align:center;
-  font-family:Arial;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 /* PASSWORD */
 #passwordOverlay{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:black;
+  display:flex;justify-content:center;align-items:center;
+  z-index:999;
+}
+
+/* HEADER */
+header{
+  width:100%;
+  background:#020617;
+  padding:10px;
   display:flex;
   justify-content:center;
-  align-items:center;
-}
-#passwordBox{
-  background:#020617;
-  padding:30px;
-  border-radius:20px;
+  gap:10px;
 }
 
-/* CARD */
-.card{
-  margin-top:30px;
-}
-
-img{
-  width:90%;
-  max-width:400px;
-  height:60vh;
-  object-fit:contain;
-}
-
-/* BUTTONS */
 button{
-  padding:12px 20px;
-  margin:10px;
-  border:none;
-  border-radius:10px;
-  font-size:18px;
+  border:none;border-radius:12px;padding:10px;
   cursor:pointer;
 }
 
 .start{background:#0284c7;color:white}
 .good{background:#16a34a}
 .bad{background:#dc2626}
+
+/* CARD */
+.card{
+  width:90vw;
+  max-width:420px;
+  height:60vh;
+  margin-top:20px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.5s;
+}
+.card.flip{transform:rotateY(180deg)}
+
+.face{
+  position:absolute;width:100%;height:100%;
+  display:flex;justify-content:center;align-items:center;
+  background:#020617;border-radius:20px;overflow:hidden;
+}
+
+.face img{
+  width:100%;height:100%;object-fit:contain;
+}
+
+.back{transform:rotateY(180deg);font-size:24px}
+
+/* CONTROLS */
+#controls{
+  display:flex;gap:10px;margin:20px;width:90%;max-width:420px;
+}
+#controls button{flex:1;padding:14px}
 </style>
 </head>
 
 <body>
 
-<!-- PASSWORD -->
 <div id="passwordOverlay">
-  <div id="passwordBox">
+  <div>
     <h2>🔒 Mot de passe</h2>
     <input type="password" id="passwordInput">
-    <br><br>
-    <button onclick="checkPassword()">Valider</button>
+    <button onclick="checkPassword()">OK</button>
   </div>
 </div>
 
-<h1>Flashcards Véhicules</h1>
+<header>
+  <button class="start" onclick="start()">▶ Démarrer</button>
+</header>
 
-<button class="start" onclick="start()">▶ Démarrer</button>
-
-<div class="card">
-  <img id="img">
-  <h2 id="name"></h2>
+<div class="card" id="card">
+  <div class="face"><img id="img"></div>
+  <div class="face back" id="back"></div>
 </div>
 
-<div>
-  <button class="bad" onclick="bad()">❌ Mauvais</button>
-  <button class="good" onclick="good()">✅ Bon</button>
+<div id="controls">
+  <button class="bad" onclick="bad()">❌</button>
+  <button class="good" onclick="good()">✅</button>
 </div>
 
 <script>
@@ -93,66 +110,175 @@ function checkPassword(){
   }
 }
 
-/* VEHICULES COMPLETS */
-const vehicles=[
-"T-55","T-62","T-64BV","T-72","T-80","T-90",
-"BMP-1","BMP-2","BMP-3",
-"BTR-80","BTR-80A",
-"M1-ABRAMS","HUMMER","STRYKER",
-"LEOPARD-2","FUCHS",
-"CHALLENGER-2",
-"ARIETE","CENTAURO",
-"MAGACH-7C",
-"COBRA","ALTAY",
-"DRAGON","VEC",
-"EAGLE-IV",
-"PTL-02"
-];
+/* 🔥 LISTE COMPLETE */
+const vehicles = {
 
-/* GENERATION IMAGES */
-const cards=[];
-vehicles.forEach(v=>{
-  for(let i=1;i<=3;i++){
-    cards.push({
-      img:`img-vehicule/${v}-${i}.jpg`,
-      name:v,
-      weight:1
-    });
-  }
-});
+"Russie":[
+"100-T-12","122-D-30","130-M-46","2-A-36","2-A-65",
+"2S1","2S3","2S5","2S7","2S19","2S35",
+"BAT-2","BM-21","BM-27","BM-30",
+"BMD-1","BMD-2","BMD-3","BMD-4",
+"BMO-T",
+"BMP-1","BMP-2","BMP-3","BMP-3-KORNET-T","BMP3-KHRIZANTEMA-S",
+"BMP-BUMERANG","BMP-T","BMP-T2","BMP-T72",
+"BRDM-2","BRDM-2-AT5","BRDM-2-RKH",
+"BRM-1","BRM-3KRYS",
+"BTR-60","BTR-70","BTR-80","BTR-80A",
+"BTR-KURGANETS",
+"BTR-TAIFUN-K","BTR-TAIFUN-K-VDV","BTR-TAIFUN-U",
+"GAZ-TIGR","GASKIN","GADFLY","GAINFULL","GECKO","GOPHER","GROUSE",
+"GMZ","IMR-2","MDK-2","MTLB","MTU-72",
+"NONA","PANTSIR","PMM-2","PTS-2","PZM",
+"SPG-9","SPRUT-B","SHTURM-S",
+"T-14-ARMATA","T-15-BALGUNIK",
+"T-55","T-62","T-64BV","T-72","T-72-B3","T-80","T-80-BVM","T-90","T-90-MS",
+"TMM-3","TMM-6",
+"TOR-M2","TULPAN","TUNGUSKA",
+"ZU-23-2","ZSU-23-4-SHILKA",
+"MI-24","MI-28","HOKUM"
+],
+
+"USA":[
+"106-M-40-A1","152-D20","2-A-36",
+"AAV-7","AH-1-COBRA","APACHE","AVENGER",
+"COUGAR","HIMARS","HUMMER",
+"JLTV","LAV-25","M-104-WOLVERINE","M-109","M-113","M-1134",
+"M-270","M-777","M1-ABRAMS","M9-ACE",
+"MATV","MAXXPRO","RIBBON-BRIDGE","STRYKER"
+],
+
+"Allemagne":[
+"BOXER","DACHS","DINGO-2","FENNEK","FUCHS",
+"LEGUAN","LEOPARD-2","LYNX","M3-AMPHIBOUS-RIG","PHZ-2000","WIESEL"
+],
+
+"Royaume-Uni":[
+"AJAX","AS-90","CHALLENGER-2","FH-70","JACKAL",
+"LIGHT-GUN","OCELOT","SCIMITAR","TERRIER","VIKING(VHM)"
+],
+
+"Italie":[
+"ARIETE","BURATINO","CENTAURO","CENTAURO-II",
+"DARDO","FRECCIA","IVECO","MANGUSTA"
+],
+
+"Israël":[
+"ACHZARIT","EITAN","MAGACH-7C","NAKPADON","NAGMASHON","NAMER","PEREH-TAMUZ"
+],
+
+"Turquie":[
+"AIFV","ALTAY","COBRA","SABRA"
+],
+
+"Espagne":[
+"BMR-600","DRAGON","VAMTAC","VEC"
+],
+
+"Suisse":[
+"EAGLE-IV","PIRANHA"
+],
+
+"Chine":[
+"PLZ-07","PTL-02","TYPE-85","WZ-551","ZBD-04","ZBD-05","ZTD-05","ZTZ-96","ZTZ-99"
+],
+
+"Japon":[
+"TYPE-10"
+],
+
+"Corée":[
+"K-1","K-2","MERKAVA-III-BAZ","MERKAVA-IV"
+],
+
+"Ukraine":[
+"DOZOR","T-64-BULAT","VARTA"
+],
+
+"Inde":[
+"ARJUN"
+],
+
+"Pologne":[
+"ROSOMAK","ROSOMAK-RAK","XA-180","XA-360"
+]
+
+};
+
+/* 🔥 GENERATEUR OPTIMISE */
+const baseList = vehicles["ALL"];
+
+function getRandomVehicle(){
+  return baseList[Math.floor(Math.random()*baseList.length)];
+}
 
 let current;
+const img=document.getElementById("img");
+const back=document.getElementById("back");
+const card=document.getElementById("card");
 
-/* RANDOM SIMPLE */
-function getRandom(){
-  return cards[Math.floor(Math.random()*cards.length)];
+/* 🔥 LOAD OPTIMISE */
+function load(){
+
+  card.classList.remove("flip");
+  img.src="";
+
+  let attempts = 0;
+
+  function tryLoad(){
+
+    if(attempts>20){
+      back.textContent="⚠️ Image introuvable";
+      return;
+    }
+
+    attempts++;
+
+    const v = getRandomVehicle();
+    const i = Math.floor(Math.random()*3)+1;
+
+    const path = `img-vehicule/${v}-${i}.jpg`;
+
+    const test = new Image();
+
+    test.onload = ()=>{
+      img.src = path;
+      back.textContent = v;
+      current = v;
+
+      preloadNext(); // ⚡
+    };
+
+    test.onerror = ()=>{
+      tryLoad();
+    };
+
+    test.src = path;
+  }
+
+  tryLoad();
+}
+
+/* ⚡ PRELOAD 5 IMAGES */
+function preloadNext(){
+  for(let i=0;i<5;i++){
+    const v = getRandomVehicle();
+    const n = Math.floor(Math.random()*3)+1;
+    const pre = new Image();
+    pre.src = `img-vehicule/${v}-${n}.jpg`;
+  }
 }
 
 /* START */
 function start(){
-  nextCard();
+  load();
 }
 
-/* NEXT */
-function nextCard(){
-  current=getRandom();
-  document.getElementById("img").src=current.img;
-  document.getElementById("name").textContent="";
-}
-
-/* CLICK IMAGE = SHOW ANSWER */
-document.getElementById("img").onclick=()=>{
-  document.getElementById("name").textContent=current.name;
-};
+/* FLIP */
+card.onclick=()=>card.classList.toggle("flip");
 
 /* BUTTONS */
-function good(){
-  nextCard();
-}
-
-function bad(){
-  nextCard();
-}
+function good(){load();}
+function bad(){load();}
 
 </script>
 
