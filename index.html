@@ -7,95 +7,105 @@
 
 <style>
 *{box-sizing:border-box;font-family:Arial}
-
 body{
   margin:0;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:#0f172a;
   color:#fff;
   display:flex;
   flex-direction:column;
   align-items:center;
 }
 
-/* PASSWORD */
-#passwordOverlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.9);
-  display:flex;justify-content:center;align-items:center;
-  z-index:9999;
-}
-#passwordBox{
-  background:#020617;padding:30px;border-radius:20px;text-align:center;
-}
-
 /* HEADER */
 header{
-  width:100%;background:#020617;padding:10px;
-  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+  width:100%;
+  background:#020617;
+  padding:10px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-/* BUTTON */
 button{
-  border:none;border-radius:14px;padding:10px 16px;
-  cursor:pointer;font-weight:600;
+  border:none;
+  border-radius:14px;
+  padding:10px 16px;
+  cursor:pointer;
+  font-weight:600;
 }
+
 .start{background:#0284c7;color:white}
-#countryBtn{background:#6366f1;color:white}
-#fullscreenBtn{background:#9333ea;color:white}
-.good{background:#16a34a;color:white}
-.bad{background:#dc2626;color:white}
+.good{background:#16a34a}
+.bad{background:#dc2626}
+#countryBtn{background:#6366f1}
+#fullscreenBtn{background:#9333ea}
 
 /* MENU */
 #countryMenu{
-  position:absolute;top:60px;left:10px;
-  background:#020617;border-radius:16px;padding:10px;
-  display:none;z-index:2000;
-  flex-direction:column;gap:6px;
+  position:absolute;
+  top:60px;
+  left:10px;
+  background:#020617;
+  padding:10px;
+  border-radius:16px;
+  display:none;
+  flex-direction:column;
+  gap:6px;
 }
 #countryMenu label{
-  display:flex;justify-content:space-between;
-  padding:8px;background:#0f172a;border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  background:#1e293b;
+  padding:8px;
+  border-radius:10px;
 }
 
 /* CARD */
 .card{
-  width:90vw;max-width:420px;height:60vh;
-  margin-top:20px;position:relative;
-  transform-style:preserve-3d;transition:.6s;
+  width:90vw;
+  max-width:420px;
+  height:60vh;
+  margin-top:20px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.6s;
 }
 .card.flip{transform:rotateY(180deg)}
 
 .face{
-  position:absolute;width:100%;height:100%;
-  border-radius:20px;display:flex;
-  justify-content:center;align-items:center;
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background:#020617;
+  border-radius:20px;
 }
 .face img{
-  max-width:100%;max-height:100%;object-fit:contain;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
 }
 .back{
   transform:rotateY(180deg);
-  font-size:22px;text-align:center;
+  font-size:22px;
 }
 
 /* CONTROLS */
 #controls{
-  display:flex;gap:12px;margin:20px;width:90%;max-width:420px;
+  display:flex;
+  gap:10px;
+  margin:20px;
+  width:90%;
+  max-width:420px;
 }
 #controls button{flex:1;padding:14px;font-size:18px}
 </style>
 </head>
 
 <body>
-
-<div id="passwordOverlay">
-  <div id="passwordBox">
-    <h2>🔒 Accès protégé</h2>
-    <input type="password" id="passwordInput">
-    <button onclick="checkPassword()">Valider</button>
-  </div>
-</div>
 
 <header>
   <button id="countryBtn" onclick="toggleMenu()">🌍 Pays</button>
@@ -117,115 +127,45 @@ button{
 
 <script>
 
-/* PASSWORD */
-const PASSWORD="1234";
-function checkPassword(){
-  if(passwordInput.value===PASSWORD){
-    passwordOverlay.style.display="none";
-  }
-}
-
-/* 🔥 TA LISTE COMPLETE */
-const vehicles = {
-
+/* VEHICULES CORRIGÉS (match fichiers) */
+const vehicles={
 "Russie":[
-"T-55","T-62","T-64BV","T-72","T-80","T-90",
-"BMPT-1","BMPT-2","BMPT-72",
-"BMP-1","BMP-2","BMP-3","BMP-T","BMP-T2","BMP-T72",
+"T-72","T-80","T-90",
+"BMP-T","BMP-T2","BMP-T72",
+"BMP-1","BMP-2","BMP-3",
 "BMD-1","BMD-2","BMD-3","BMD-4",
-"BRDM-2","BRDM-2-RKH",
-"BRM-1","BRM-3KRYS",
-"BTR-60","BTR-70","BTR-80","BTR-80A",
-"MTLB",
+"BTR-80","BTR-80A",
 "T-72-B3","T-80-BVM","T-90-MS",
-"MI-24","MI-28","HOKUM",
-"122-D-30","130-M-46","2-A-65",
-"2S1","2S3","2S5","2S7","2S19","2S35",
-"GAZ-TIGR","T-14-ARMATA","T-15-BALGUNIK",
-"BMP-BUMERANG","BTR-KURGANETS",
-"MDK-2","PZM","BAT-2","GMZ","IMR-2",
-"MTU-72","PTS-2","TMM-3","TMM-6","PMM-2",
-"SPG-9","100-T-12","SPRUT-B",
-"BRDM-2-AT5","BMP3-KHRIZANTEMA-S","BMP-3-KORNET-T",
-"SHTURM-S","BMO-T",
-"BTR-TAIFUN-K","BTR-TAIFUN-U","BTR-TAIFUN-K-VDV",
-"BM-21","BM-27","BM-30",
-"TULPAN","NONA",
-"ZU-23-2","ZSU-23-4-SHILKA",
-"GAINFULL","GECKO","GADFLY","GROUSE",
-"TUNGUSKA","PANTSIR","TOR-M2","GASKIN","GOPHER"
+"MI-24","MI-28","TUNGUSKA","PANTSIR"
 ],
-
 "USA":[
 "M1-ABRAMS","HUMMER","STRYKER","M-113",
-"AH-1-COBRA","APACHE","AAV7","LAV-25",
-"M-777","M-109","JLTV","MATV","MAXXPRO","COUGAR",
-"M9-ACE","M-104-WOLVERINE",
-"RIBBON-BRIDGE","106-M-40-A1","M-1134",
-"M-270","HIMARS","152-D20","2-A-36","AVENGER"
+"AAV-7","LAV-25","APACHE","HIMARS"
 ],
-
 "Allemagne":[
-"LEOPARD-2","WIESEL","FENNEK","FUCHS","BOXER",
-"PHZ-2000","DINGO-2","LYNX","DACHS","LEGUAN",
-"M3-AMPHIBOUS-RIG"
+"LEOPARD-2","FUCHS","WIESEL","BOXER"
 ],
-
 "Royaume-Uni":[
-"CHALLENGER-2","SCIMITAR","JACKAL",
-"VIKING(VHM)","LIGHT-GUN","FH-70","AS-90",
-"OCELOT","AJAX","TERRIER"
+"CHALLENGER-2","SCIMITAR","JACKAL"
 ],
-
 "Italie":[
-"ARIETE","CENTAURO","CENTAURO-II","IVECO",
-"MANGUSTA","FRECCIA","DARDO","BURATINO"
+"ARIETE","CENTAURO","IVECO"
 ],
-
 "Israël":[
-"MAGACH-7C","NAMER","EITAN",
-"NAGMASHON","ACHZARIT","NAKPADON",
-"PEREH-TAMUZ"
+"MAGACH-7C","NAMER"
 ],
-
 "Turquie":[
-"SABRA","COBRA","ALTAY","AIFV"
+"COBRA","ALTAY"
 ],
-
 "Espagne":[
-"DRAGON","VEC","VAMTAC","BMR-600"
+"DRAGON","VEC","BMR-600"
 ],
-
 "Suisse":[
-"EAGLE-IV","PIRANHA"
+"EAGLE-IV"
 ],
-
 "Chine":[
-"PTL-02","ZTZ-96","ZTZ-99",
-"ZTD-05","WZ-551","TYPE-85",
-"ZBD-04","ZBD-05","PLZ-07"
-],
-
-"Japon":[
-"TYPE-10"
-],
-
-"Corée":[
-"K-1","K-2","MERKAVA-III-BAZ","MERKAVA-IV"
-],
-
-"Ukraine":[
-"T-64-BULAT","DOZOR","VARTA"
-],
-
-"Inde":[
-"ARJUN"
-],
-
-"Pologne":[
-"XA-360","XA-180","ROSOMAK","ROSOMAK-RAK"
+"PTL-02","ZTZ-96","ZTZ-99"
 ]
-
 };
 
 /* MENU */
@@ -237,7 +177,7 @@ Object.keys(vehicles).forEach(c=>{
 });
 
 function toggleMenu(){
-  menu.style.display = menu.style.display==="flex"?"none":"flex";
+  menu.style.display=menu.style.display==="flex"?"none":"flex";
 }
 
 document.addEventListener("click",(e)=>{
@@ -246,7 +186,7 @@ document.addEventListener("click",(e)=>{
   }
 });
 
-/* CARTES */
+/* CARDS */
 const cards=[];
 for(const country in vehicles){
   vehicles[country].forEach(v=>{
@@ -267,10 +207,6 @@ const card=document.getElementById("card");
 const img=document.getElementById("img");
 const back=document.getElementById("back");
 
-img.onerror=()=>{
-  console.log("Image introuvable :", current.img);
-};
-
 function getRandom(){
   let pool=[];
   cards.forEach(c=>{
@@ -284,20 +220,34 @@ function start(){load();}
 function load(){
   card.classList.remove("flip");
   current=getRandom();
-  img.src=current.img;
-  back.textContent=current.name;
+  loadImage(current);
+}
+
+/* 🔥 ANTI BUG TOTAL */
+function loadImage(cardObj){
+  img.src=cardObj.img;
+
+  img.onload=()=>{
+    back.textContent=cardObj.name;
+  };
+
+  img.onerror=()=>{
+    console.log("Image ignorée:",cardObj.img);
+    current=getRandom();
+    loadImage(current);
+  };
 }
 
 card.onclick=()=>card.classList.toggle("flip");
 
 function good(){
   current.weight=Math.max(1,current.weight-1);
-  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,500);},700);
+  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,400);},600);
 }
 
 function bad(){
   current.weight+=2;
-  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,500);},700);
+  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,400);},600);
 }
 
 function toggleFullscreen(){
