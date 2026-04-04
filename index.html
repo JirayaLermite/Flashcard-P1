@@ -205,8 +205,11 @@ const vehicles = [
 ];
 
 /* 🔥 GENERATEUR OPTIMISE */
-const baseList = vehicles["ALL"];
+let baseList = [];
 
+for(const country in vehicles){
+  baseList = baseList.concat(vehicles[country]);
+}
 function getRandomVehicle(){
   return baseList[Math.floor(Math.random()*baseList.length)];
 }
