@@ -41,7 +41,6 @@ header{
   padding:10px;
   display:flex;
   justify-content:center;
-  gap:10px;
 }
 
 /* BUTTONS */
@@ -84,7 +83,6 @@ button{
   width:100%;
   height:100%;
   object-fit:contain;
-  display:block;
 }
 
 .back{
@@ -145,7 +143,7 @@ function checkPassword(){
   }
 }
 
-/* VEHICULES TEST */
+/* VEHICULES TEST (tu peux remettre toute ta liste après) */
 const vehicles=[
 "T-72","T-80","T-90",
 "BMP-1","BMP-2","BMP-3",
@@ -179,7 +177,7 @@ function start(){
   load();
 }
 
-/* 🔥 LOAD FIX GITHUB */
+/* 🔥 LOAD SAFE */
 function load(){
   card.classList.remove("flip");
   img.src="";
@@ -187,12 +185,10 @@ function load(){
   function tryLoad(){
     current=getRandom();
 
-    const base = window.location.origin + "/Flashcard-P1/";
-
     const test=new Image();
 
     test.onload=()=>{
-      img.src = base + current.img;
+      img.src = current.img;
       back.textContent = current.name;
     };
 
@@ -200,7 +196,7 @@ function load(){
       tryLoad();
     };
 
-    test.src = base + current.img;
+    test.src = current.img;
   }
 
   tryLoad();
