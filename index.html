@@ -7,7 +7,6 @@
 
 <style>
 *{box-sizing:border-box;font-family:Arial}
-
 body{
   margin:0;
   background:#0f172a;
@@ -17,30 +16,15 @@ body{
   align-items:center;
 }
 
-/* 🔒 PASSWORD */
+/* PASSWORD */
 #passwordOverlay{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(0,0,0,.95);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display:flex;justify-content:center;align-items:center;
   z-index:9999;
 }
 #passwordBox{
-  background:#020617;
-  padding:30px;
-  border-radius:20px;
-  text-align:center;
-  width:90%;
-  max-width:320px;
-}
-#passwordBox input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  margin:10px 0;
+  background:#020617;padding:30px;border-radius:20px;text-align:center;
 }
 
 /* HEADER */
@@ -55,38 +39,14 @@ header{
 }
 
 button{
-  border:none;
-  border-radius:14px;
-  padding:10px 16px;
-  cursor:pointer;
-  font-weight:600;
+  border:none;border-radius:14px;padding:10px 16px;
+  cursor:pointer;font-weight:600;
 }
-
 .start{background:#0284c7;color:white}
 .good{background:#16a34a}
 .bad{background:#dc2626}
 #countryBtn{background:#6366f1}
 #fullscreenBtn{background:#9333ea}
-
-/* MENU */
-#countryMenu{
-  position:absolute;
-  top:60px;
-  left:10px;
-  background:#020617;
-  padding:10px;
-  border-radius:16px;
-  display:none;
-  flex-direction:column;
-  gap:6px;
-}
-#countryMenu label{
-  display:flex;
-  justify-content:space-between;
-  background:#1e293b;
-  padding:8px;
-  border-radius:10px;
-}
 
 /* CARD */
 .card{
@@ -101,32 +61,17 @@ button{
 .card.flip{transform:rotateY(180deg)}
 
 .face{
-  position:absolute;
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#020617;
-  border-radius:20px;
+  position:absolute;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  background:#020617;border-radius:20px;
 }
 .face img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
+  max-width:100%;max-height:100%;object-fit:contain;
 }
-.back{
-  transform:rotateY(180deg);
-  font-size:22px;
-}
+.back{transform:rotateY(180deg);font-size:22px}
 
-/* CONTROLS */
 #controls{
-  display:flex;
-  gap:10px;
-  margin:20px;
-  width:90%;
-  max-width:420px;
+  display:flex;gap:10px;margin:20px;width:90%;max-width:420px;
 }
 #controls button{flex:1;padding:14px;font-size:18px}
 </style>
@@ -134,23 +79,19 @@ button{
 
 <body>
 
-<!-- 🔒 PASSWORD -->
+<!-- PASSWORD -->
 <div id="passwordOverlay">
   <div id="passwordBox">
     <h2>🔒 Accès protégé</h2>
     <input type="password" id="passwordInput">
     <button onclick="checkPassword()">Valider</button>
-    <p id="passwordError" style="color:red;display:none">Incorrect</p>
   </div>
 </div>
 
 <header>
-  <button id="countryBtn" onclick="toggleMenu()">🌍 Pays</button>
-  <button class="start" onclick="start()">▶ Démarrer</button>
-  <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ Plein écran</button>
+  <button onclick="start()" class="start">▶ Démarrer</button>
+  <button onclick="toggleFullscreen()">⛶ Plein écran</button>
 </header>
-
-<div id="countryMenu"></div>
 
 <div class="card" id="card">
   <div class="face"><img id="img"></div>
@@ -164,247 +105,74 @@ button{
 
 <script>
 
-/* 🔒 PASSWORD */
+/* PASSWORD */
 const PASSWORD="1234";
 function checkPassword(){
   if(passwordInput.value===PASSWORD){
     passwordOverlay.style.display="none";
-  }else{
-    passwordError.style.display="block";
   }
 }
 
-/* 🌍 VEHICULES COMPLETS */
-const vehicles = {
-
-"Russie":[
-"T-55","T-62","T-64BV","T-72","T-80","T-90",
-"T-72-B3","T-80-BVM","T-90-MS",
-"T-14-ARMATA","T-15-BALGUNIK",
+/* LISTE SIMPLIFIÉE STABLE */
+const vehicles=[
+"T-72","T-80","T-90",
 "BMP-1","BMP-2","BMP-3",
-"BMP-T","BMP-T2","BMP-T72",
-"BMP-BUMERANG",
-"BMD-1","BMD-2","BMD-3","BMD-4",
-"BMO-T",
-"BTR-60","BTR-70","BTR-80","BTR-80A",
-"BTR-KURGANETS",
-"BTR-TAIFUN-K","BTR-TAIFUN-U","BTR-TAIFUN-K-VDV",
-"BRDM-2","BRDM-2-RKH","BRDM-2-AT5",
-"BRM-1","BRM-3KRYS",
-"MTLB","MTU-72",
-"PTS-2","PMM-2",
-"TMM-3","TMM-6",
-"MDK-2","IMR-2","PZM","BAT-2","GMZ",
-"GAZ-TIGR",
-"SPG-9","100-T-12","SPRUT-B",
-"BMP3-KHRIZANTEMA-S","BMP-3-KORNET-T","SHTURM-S",
-"BM-21","BM-27","BM-30",
-"2S1","2S3","2S5","2S7","2S19","2S35",
-"122-D-30","130-M-46","2-A-65",
-"TULPAN","NONA",
-"ZU-23-2","ZSU-23-4-SHILKA",
-"TUNGUSKA","PANTSIR","TOR-M2",
-"GAINFULL","GECKO","GADFLY","GROUSE",
-"GASKIN","GOPHER",
-"MI-24","MI-28","HOKUM"
-],
+"BTR-80","BTR-80A",
+"M1-ABRAMS","HUMMER","STRYKER",
+"LEOPARD-2","FUCHS",
+"CHALLENGER-2",
+"ARIETE","CENTAURO",
+"MAGACH-7C",
+"COBRA","ALTAY",
+"DRAGON","VEC",
+"EAGLE-IV",
+"PTL-02"
+];
 
-"USA":[
-"M1-ABRAMS","HUMMER","STRYKER","M-113",
-"AAV-7","LAV-25",
-"AH-1-COBRA","APACHE",
-"M-777","M-109",
-"JLTV","MATV","MAXXPRO","COUGAR",
-"M9-ACE","M-104-WOLVERINE",
-"RIBBON-BRIDGE",
-"106-M-40-A1","M-1134",
-"M-270","HIMARS",
-"152-D20","2-A-36",
-"AVENGER"
-],
-
-"Allemagne":[
-"LEOPARD-2","WIESEL","FENNEK","FUCHS","BOXER",
-"PHZ-2000","DINGO-2","LYNX",
-"DACHS","LEGUAN","M3-AMPHIBOUS-RIG"
-],
-
-"Royaume-Uni":[
-"CHALLENGER-2","SCIMITAR","JACKAL",
-"VIKING(VHM)",
-"LIGHT-GUN","FH-70","AS-90",
-"OCELOT","AJAX","TERRIER"
-],
-
-"Italie":[
-"ARIETE","CENTAURO","CENTAURO-II",
-"IVECO","MANGUSTA","FRECCIA","DARDO","BURATINO"
-],
-
-"Israël":[
-"MAGACH-7C","NAMER","EITAN",
-"NAGMASHON","ACHZARIT","NAKPADON",
-"PEREH-TAMUZ"
-],
-
-"Turquie":[
-"SABRA","COBRA","ALTAY","AIFV"
-],
-
-"Espagne":[
-"DRAGON","VEC","VAMTAC","BMR-600"
-],
-
-"Suisse":[
-"EAGLE-IV","PIRANHA"
-],
-
-"Chine":[
-"PTL-02","ZTZ-96","ZTZ-99",
-"ZTD-05","WZ-551","TYPE-85",
-"ZBD-04","ZBD-05","PLZ-07"
-],
-
-"Japon":[
-"TYPE-10"
-],
-
-"Corée":[
-"K-1","K-2","MERKAVA-III-BAZ","MERKAVA-IV"
-],
-
-"Ukraine":[
-"T-64-BULAT","DOZOR","VARTA"
-],
-
-"Inde":[
-"ARJUN"
-],
-
-"Pologne":[
-"XA-360","XA-180","ROSOMAK","ROSOMAK-RAK"
-]
-
-};
-/* MENU */
-const menu=document.getElementById("countryMenu");
-Object.keys(vehicles).forEach(c=>{
-  const label=document.createElement("label");
-  label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
-  menu.appendChild(label);
-});
-
-function toggleMenu(){
-  menu.style.display=menu.style.display==="flex"?"none":"flex";
-}
-
-document.addEventListener("click",(e)=>{
-  if(!menu.contains(e.target)&&e.target.id!=="countryBtn"){
-    menu.style.display="none";
+/* CARDS */
+const cards=[];
+vehicles.forEach(v=>{
+  for(let i=1;i<=3;i++){
+    cards.push({
+      img:`img-vehicule/${v}-${i}.jpg`,
+      name:v,
+      weight:1
+    });
   }
 });
 
-/* 🔥 CARDS */
-let allCards=[];
-for(const country in vehicles){
-  vehicles[country].forEach(v=>{
-    for(let i=1;i<=3;i++){
-      allCards.push({
-        img:`img-vehicule/${v}-${i}.jpg`,
-        name:v,
-        weight:1
-      });
-    }
-  });
-}
-
-/* FILE */
-let queue=[];
-function generateQueue(){
-  queue=[];
-  for(let i=0;i<6;i++) queue.push(getRandom());
-}
-
-/* RANDOM */
-function getRandom(){
-  let pool=[];
-  allCards.forEach(c=>{
-    for(let i=0;i<c.weight;i++) pool.push(c);
-  });
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
-/* DOM */
 let current;
-const card=document.getElementById("card");
 const img=document.getElementById("img");
 const back=document.getElementById("back");
+const card=document.getElementById("card");
 
-/* START */
+function getRandom(){
+  return cards[Math.floor(Math.random()*cards.length)];
+}
+
 function start(){
-  generateQueue();
-  loadNext();
+  load();
 }
 
-/* LOAD */
-function loadNext(){
-  if(queue.length<3) generateQueue();
-  current=queue.shift();
-  tryLoad(current);
+function load(){
+  card.classList.remove("flip");
+  current=getRandom();
+  img.src=current.img;
+  back.textContent=current.name;
 }
 
-/* 🔥 SAFE IMAGE */
-function tryLoad(cardObj){
-  const test=new Image();
-
-  test.onload=()=>{
-    img.src=cardObj.img;
-    back.textContent=cardObj.name;
-    preload();
-  };
-
-  test.onerror=()=>{
-    loadNext();
-  };
-
-  test.src=cardObj.img;
-}
-
-/* PRELOAD */
-function preload(){
-  queue.slice(0,5).forEach(c=>{
-    const i=new Image();
-    i.src=c.img;
-  });
-}
-
-/* FLIP */
 card.onclick=()=>card.classList.toggle("flip");
 
-/* BON / MAUVAIS */
-function good(){
-  current.weight=Math.max(1,current.weight-1);
-  next();
-}
-function bad(){
-  current.weight+=2;
-  next();
-}
+function good(){load();}
+function bad(){load();}
 
-function next(){
-  setTimeout(()=>{
-    card.classList.remove("flip");
-    setTimeout(loadNext,300);
-  },400);
-}
-
-/* FULLSCREEN */
 function toggleFullscreen(){
   if(!document.fullscreenElement){
     document.documentElement.requestFullscreen();
   }else{
     document.exitFullscreen();
   }
+
 }
 
 </script>
