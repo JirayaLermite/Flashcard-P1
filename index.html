@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards Véhicules</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial}
+
+body{
+  margin:0;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* PASSWORD */
+#passwordOverlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;justify-content:center;align-items:center;
+  z-index:9999;
+}
+#passwordBox{
+  background:#020617;padding:30px;border-radius:20px;text-align:center;
+}
+
+/* HEADER */
+header{
+  width:100%;background:#020617;padding:10px;
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+}
+
+/* BUTTON */
+button{
+  border:none;border-radius:14px;padding:10px 16px;
+  cursor:pointer;font-weight:600;
+}
+.start{background:#0284c7;color:white}
+#countryBtn{background:#6366f1;color:white}
+#fullscreenBtn{background:#9333ea;color:white}
+.good{background:#16a34a;color:white}
+.bad{background:#dc2626;color:white}
+
+/* MENU */
+#countryMenu{
+  position:absolute;top:60px;left:10px;
+  background:#020617;border-radius:16px;padding:10px;
+  display:none;z-index:2000;
+  flex-direction:column;gap:6px;
+}
+#countryMenu label{
+  display:flex;justify-content:space-between;
+  padding:8px;background:#0f172a;border-radius:10px;
+}
+
+/* CARD */
+.card{
+  width:90vw;max-width:420px;height:60vh;
+  margin-top:20px;position:relative;
+  transform-style:preserve-3d;transition:.6s;
+}
+.card.flip{transform:rotateY(180deg)}
+
+.face{
+  position:absolute;width:100%;height:100%;
+  border-radius:20px;display:flex;
+  justify-content:center;align-items:center;
+  background:#020617;
+}
+.face img{
+  max-width:100%;max-height:100%;object-fit:contain;
+}
+.back{
+  transform:rotateY(180deg);
+  font-size:22px;text-align:center;
+}
+
+/* CONTROLS */
+#controls{
+  display:flex;gap:12px;margin:20px;width:90%;max-width:420px;
+}
+#controls button{flex:1;padding:14px;font-size:18px}
+</style>
+</head>
+
+<body>
+
+<div id="passwordOverlay">
+  <div id="passwordBox">
+    <h2>🔒 Accès protégé</h2>
+    <input type="password" id="passwordInput">
+    <button onclick="checkPassword()">Valider</button>
+  </div>
+</div>
+
+<header>
+  <button id="countryBtn" onclick="toggleMenu()">🌍 Pays</button>
+  <button class="start" onclick="start()">▶ Démarrer</button>
+  <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ Plein écran</button>
+</header>
+
+<div id="countryMenu"></div>
+
+<div class="card" id="card">
+  <div class="face"><img id="img"></div>
+  <div class="face back" id="back"></div>
+</div>
+
+<div id="controls">
+  <button class="bad" onclick="bad()">❌</button>
+  <button class="good" onclick="good()">✅</button>
+</div>
+
+<script>
+
+/* PASSWORD */
+const PASSWORD="1234";
+function checkPassword(){
+  if(passwordInput.value===PASSWORD){
+    passwordOverlay.style.display="none";
+  }
+}
+
+/* 🔥 TA LISTE COMPLETE */
+const vehicles={
+"Russie":["T-55","T-62","T-64BV","T-72","T-80","T-90"],
+"USA":["M1-ABRAMS","HUMMER","STRYKER","M-113"],
+"Allemagne":["LEOPARD-2","FUCHS","WIESEL","EAGLE-IV","FENNEK"],
+"Royaume-Uni":["CHALLENGER-2","JACKAL","SCIMITAR"],
+"Italie":["ARIETE","CENTAURO","IVECO"],
+"Israël":["MAGACH-7C","SABRA"],
+"Turquie":["COBRA"],
+"Espagne":["BMR-600","DRAGON"],
+"Suisse":["EAGLE-IV"],
+"Chine":["PTL-02"]
+};
+
+/* MENU */
+const menu=document.getElementById("countryMenu");
+Object.keys(vehicles).forEach(c=>{
+  const label=document.createElement("label");
+  label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
+  menu.appendChild(label);
+});
+
+function toggleMenu(){
+  menu.style.display = menu.style.display==="flex"?"none":"flex";
+}
+
+document.addEventListener("click",(e)=>{
+  if(!menu.contains(e.target)&&e.target.id!=="countryBtn"){
+    menu.style.display="none";
+  }
+});
+
+/* CARTES */
+const cards=[];
+for(const country in vehicles){
+  vehicles[country].forEach(v=>{
+    for(let i=1;i<=3;i++){
+      cards.push({
+        img:`img-vehicule/${v}-${i}.jpg`,
+        name:v,
+        country,
+        weight:1
+      });
+    }
+  });
+}
+
+/* LOGIQUE */
+let current;
+const card=document.getElementById("card");
+const img=document.getElementById("img");
+const back=document.getElementById("back");
+
+img.onerror=()=>{
+  console.log("Image introuvable :", current.img);
+};
+
+function getRandom(){
+  let pool=[];
+  cards.forEach(c=>{
+    for(let i=0;i<c.weight;i++) pool.push(c);
+  });
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function start(){load();}
+
+function load(){
+  card.classList.remove("flip");
+  current=getRandom();
+  img.src=current.img;
+  back.textContent=current.name;
+}
+
+card.onclick=()=>card.classList.toggle("flip");
+
+function good(){
+  current.weight=Math.max(1,current.weight-1);
+  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,500);},700);
+}
+
+function bad(){
+  current.weight+=2;
+  setTimeout(()=>{card.classList.remove("flip");setTimeout(load,500);},700);
+}
+
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen();
+  }else{
+    document.exitFullscreen();
+  }
+}
+
+</script>
+
+</body>
+</html>
