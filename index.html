@@ -54,6 +54,7 @@ button{
   height:60vh;
   margin:30px auto;
   position:relative;
+
   transform-style:preserve-3d;
   transition:0.5s;
 }
@@ -72,6 +73,9 @@ button{
   background:#020617;
   border-radius:20px;
   overflow:hidden;
+
+  backface-visibility: hidden; 
+  -webkit-backface-visibility: hidden;
 }
 
 .face img{
