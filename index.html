@@ -102,7 +102,7 @@ button{
 
 <script>
 
-/* 🔥 CARTES TEST (GROSSE LISTE) */
+/* 🔥 CARTES TEST */
 const cards = [
 
 /* 🇷🇺 RUSSIE */
@@ -127,20 +127,8 @@ const cards = [
 {img:"img-vehicule/T-90-3.jpg", name:"T-90", country:"Russie", weight:1},
 
 {img:"img-vehicule/BMP-1-1.jpg", name:"BMP-1", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-1-2.jpg", name:"BMP-1", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-1-3.jpg", name:"BMP-1", country:"Russie", weight:1},
-
 {img:"img-vehicule/BMP-2-1.jpg", name:"BMP-2", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-2-2.jpg", name:"BMP-2", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-2-3.jpg", name:"BMP-2", country:"Russie", weight:1},
-
 {img:"img-vehicule/BMP-3-1.jpg", name:"BMP-3", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-3-2.jpg", name:"BMP-3", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-3-3.jpg", name:"BMP-3", country:"Russie", weight:1},
-
-{img:"img-vehicule/BTR-80-1.jpg", name:"BTR-80", country:"Russie", weight:1},
-{img:"img-vehicule/BTR-80-2.jpg", name:"BTR-80", country:"Russie", weight:1},
-{img:"img-vehicule/BTR-80-3.jpg", name:"BTR-80", country:"Russie", weight:1},
 
 /* 🇺🇸 USA */
 {img:"img-vehicule/M1-ABRAMS-1.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
@@ -156,51 +144,33 @@ const cards = [
 {img:"img-vehicule/STRYKER-3.jpg", name:"STRYKER", country:"USA", weight:1},
 
 {img:"img-vehicule/HIMARS-1.jpg", name:"HIMARS", country:"USA", weight:1},
-{img:"img-vehicule/HIMARS-2.jpg", name:"HIMARS", country:"USA", weight:1},
-{img:"img-vehicule/HIMARS-3.jpg", name:"HIMARS", country:"USA", weight:1},
 
 /* 🇩🇪 ALLEMAGNE */
 {img:"img-vehicule/LEOPARD-2-1.jpg", name:"LEOPARD-2", country:"Allemagne", weight:1},
-{img:"img-vehicule/LEOPARD-2-2.jpg", name:"LEOPARD-2", country:"Allemagne", weight:1},
-{img:"img-vehicule/LEOPARD-2-3.jpg", name:"LEOPARD-2", country:"Allemagne", weight:1},
-
 {img:"img-vehicule/FUCHS-1.jpg", name:"FUCHS", country:"Allemagne", weight:1},
-{img:"img-vehicule/FUCHS-2.jpg", name:"FUCHS", country:"Allemagne", weight:1},
-{img:"img-vehicule/FUCHS-3.jpg", name:"FUCHS", country:"Allemagne", weight:1},
-
 {img:"img-vehicule/BOXER-1.jpg", name:"BOXER", country:"Allemagne", weight:1},
-{img:"img-vehicule/BOXER-2.png.jpg", name:"BOXER", country:"Allemagne", weight:1},
-{img:"img-vehicule/BOXER-3.jpg", name:"BOXER", country:"Allemagne", weight:1},
 
 /* 🇬🇧 UK */
 {img:"img-vehicule/CHALLENGER-2-1.jpg", name:"CHALLENGER-2", country:"UK", weight:1},
-{img:"img-vehicule/CHALLENGER-2-2.jpg", name:"CHALLENGER-2", country:"UK", weight:1},
-{img:"img-vehicule/CHALLENGER-2-3.jpg", name:"CHALLENGER-2", country:"UK", weight:1},
-
-{img:"img-vehicule/SCIMITAR-1.jpg", name:"SCIMITAR", country:"UK", weight:1},
-{img:"img-vehicule/SCIMITAR-2.jpg", name:"SCIMITAR", country:"UK", weight:1},
-{img:"img-vehicule/SCIMITAR-3.jpg", name:"SCIMITAR", country:"UK", weight:1}
+{img:"img-vehicule/SCIMITAR-1.jpg", name:"SCIMITAR", country:"UK", weight:1}
 
 ];
 
-/* MENU PAYS */
+/* MENU */
 const menu = document.getElementById("menu");
-
 const countries = [...new Set(cards.map(c=>c.country))];
 
 countries.forEach(c=>{
   const l=document.createElement("label");
 
   const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.value = c;
-  checkbox.checked = true;
+  checkbox.type="checkbox";
+  checkbox.value=c;
+  checkbox.checked=true;
 
-  checkbox.onchange = () => {
-    load(); // 🔥 refresh direct
-  };
+  checkbox.onchange = () => load();
 
-  l.appendChild(document.createTextNode(c + " "));
+  l.appendChild(document.createTextNode(c+" "));
   l.appendChild(checkbox);
 
   menu.appendChild(l);
@@ -216,7 +186,7 @@ function getFiltered(){
   return cards.filter(c=>selected.includes(c.country));
 }
 
-/* 🧠 RANDOM INTELLIGENT */
+/* RANDOM INTELLIGENT */
 function getWeighted(list){
   let total=0;
   list.forEach(c=>total+=c.weight);
@@ -251,24 +221,17 @@ function load(){
   current = c;
 }
 
-/* BUTTONS */
+/* FIX FLIP */
 function good(){
   current.weight = Math.max(1,current.weight-1);
-  load();
+  card.classList.remove("flip");
+  setTimeout(load,300);
 }
 
 function bad(){
   current.weight += 2;
-  load();
+  card.classList.remove("flip");
+  setTimeout(load,300);
 }
 
-function next(){ load(); }
-
-card.onclick=()=>card.classList.toggle("flip");
-
-setTimeout(next,100);
-
-</script>
-
-</body>
-</html>
+function next(){
