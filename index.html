@@ -1,1 +1,153 @@
-<img src="img-vehicule/T-72-1.jpg" style="width:300px;">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards Véhicules</title>
+
+<style>
+body{
+  margin:0;
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+/* HEADER */
+header{
+  background:#020617;
+  padding:10px;
+}
+
+/* CARD */
+.card{
+  width:90vw;
+  max-width:400px;
+  margin:30px auto;
+  background:#020617;
+  border-radius:20px;
+  padding:10px;
+  box-shadow:0 0 10px #000;
+}
+
+.card img{
+  width:100%;
+  height:300px;
+  object-fit:contain;
+  border-radius:10px;
+}
+
+/* ANSWER */
+#answer{
+  font-size:22px;
+  margin:15px;
+  display:none;
+}
+
+/* BUTTONS */
+button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.show{background:#2563eb}
+.good{background:#16a34a}
+.bad{background:#dc2626}
+
+.controls{
+  margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <button onclick="next()">▶ Suivant</button>
+</header>
+
+<div class="card">
+  <img id="img">
+  <div id="answer"></div>
+
+  <div class="controls">
+    <button class="show" onclick="showAnswer()">👁 Voir</button>
+    <button class="bad" onclick="bad()">❌</button>
+    <button class="good" onclick="good()">✅</button>
+  </div>
+</div>
+
+<script>
+
+/* 🔥 CARTES TEST */
+const cards = [
+
+{img:"img-vehicule/T-72-1.jpg", name:"T-72", weight:1},
+{img:"img-vehicule/T-80-1.jpg", name:"T-80", weight:1},
+{img:"img-vehicule/T-90-1.jpg", name:"T-90", weight:1},
+
+{img:"img-vehicule/M1-ABRAMS-1.jpg", name:"M1-ABRAMS", weight:1},
+{img:"img-vehicule/HUMMER-1.jpg", name:"HUMMER", weight:1},
+{img:"img-vehicule/STRYKER-1.jpg", name:"STRYKER", weight:1}
+
+];
+
+/* 🧠 RANDOM INTELLIGENT */
+function getWeighted(){
+  let total=0;
+  cards.forEach(c=>total+=c.weight);
+
+  let r=Math.random()*total;
+
+  for(let c of cards){
+    if(r<c.weight) return c;
+    r-=c.weight;
+  }
+}
+
+/* LOAD */
+let current;
+
+function load(){
+  const c = getWeighted();
+
+  current = c;
+
+  document.getElementById("img").src = c.img;
+
+  const ans = document.getElementById("answer");
+  ans.style.display = "none";
+  ans.textContent = c.name;
+}
+
+/* SHOW ANSWER */
+function showAnswer(){
+  document.getElementById("answer").style.display = "block";
+}
+
+/* BUTTONS */
+function good(){
+  current.weight = Math.max(1,current.weight-1);
+  load();
+}
+
+function bad(){
+  current.weight += 2;
+  load();
+}
+
+function next(){
+  load();
+}
+
+/* START */
+load();
+
+</script>
+
+</body>
+</html>
