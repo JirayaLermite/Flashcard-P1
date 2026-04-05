@@ -190,7 +190,19 @@ const countries = [...new Set(cards.map(c=>c.country))];
 
 countries.forEach(c=>{
   const l=document.createElement("label");
-  l.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.value = c;
+  checkbox.checked = true;
+
+  checkbox.onchange = () => {
+    load(); // 🔥 refresh direct
+  };
+
+  l.appendChild(document.createTextNode(c + " "));
+  l.appendChild(checkbox);
+
   menu.appendChild(l);
 });
 
