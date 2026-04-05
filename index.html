@@ -104,39 +104,13 @@ button{
 /* 🔥 CARTES TEST */
 const cards = [
 
-/* 🇷🇺 RUSSIE */
-{img:"img-vehicule/T-55-1.jpg", name:"T-55", country:"Russie", weight:1},
-{img:"img-vehicule/T-55-2.jpg", name:"T-55", country:"Russie", weight:1},
-{img:"img-vehicule/T-55-3.jpg", name:"T-55", country:"Russie", weight:1},
-
-{img:"img-vehicule/T-62-1.jpg", name:"T-62", country:"Russie", weight:1},
-{img:"img-vehicule/T-62-2.jpg", name:"T-62", country:"Russie", weight:1},
-{img:"img-vehicule/T-62-3.jpg", name:"T-62", country:"Russie", weight:1},
-
 {img:"img-vehicule/T-72-1.jpg", name:"T-72", country:"Russie", weight:1},
-{img:"img-vehicule/T-72-2.jpg", name:"T-72", country:"Russie", weight:1},
-{img:"img-vehicule/T-72-3.jpg", name:"T-72", country:"Russie", weight:1},
-
 {img:"img-vehicule/T-80-1.jpg", name:"T-80", country:"Russie", weight:1},
-{img:"img-vehicule/T-80-2.jpg", name:"T-80", country:"Russie", weight:1},
-{img:"img-vehicule/T-80-3.jpg", name:"T-80", country:"Russie", weight:1},
-
 {img:"img-vehicule/T-90-1.jpg", name:"T-90", country:"Russie", weight:1},
-{img:"img-vehicule/T-90-2.jpg", name:"T-90", country:"Russie", weight:1},
-{img:"img-vehicule/T-90-3.jpg", name:"T-90", country:"Russie", weight:1},
 
-/* 🇺🇸 USA */
 {img:"img-vehicule/M1-ABRAMS-1.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
-{img:"img-vehicule/M1-ABRAMS-2.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
-{img:"img-vehicule/M1-ABRAMS-3.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
-
 {img:"img-vehicule/HUMMER-1.jpg", name:"HUMMER", country:"USA", weight:1},
-{img:"img-vehicule/HUMMER-2.jpg", name:"HUMMER", country:"USA", weight:1},
-{img:"img-vehicule/HUMMER-3.jpg", name:"HUMMER", country:"USA", weight:1},
-
-{img:"img-vehicule/STRYKER-1.jpg", name:"STRYKER", country:"USA", weight:1},
-{img:"img-vehicule/STRYKER-2.jpg", name:"STRYKER", country:"USA", weight:1},
-{img:"img-vehicule/STRYKER-3.jpg", name:"STRYKER", country:"USA", weight:1}
+{img:"img-vehicule/STRYKER-1.jpg", name:"STRYKER", country:"USA", weight:1}
 
 ];
 
@@ -170,60 +144,47 @@ function getFiltered(){
   return cards.filter(c=>selected.includes(c.country));
 }
 
-/* RANDOM INTELLIGENT */
-function getWeighted(list){
-  let total=0;
-  list.forEach(c=>total+=c.weight);
-
-  let r=Math.random()*total;
-
-  for(let c of list){
-    if(r<c.weight) return c;
-    r-=c.weight;
-  }
+/* RANDOM SIMPLE */
+function getRandom(list){
+  return list[Math.floor(Math.random()*list.length)];
 }
 
-/* 🔥 SYSTEME ANTI FREEZE */
+/* LOAD SIMPLE (ANTI FREEZE) */
 let current;
-let nextCard;
-
-function pickCard(){
-  const list = getFiltered();
-  if(list.length===0){
-    alert("Choisis un pays");
-    return null;
-  }
-  return getWeighted(list);
-}
 
 function load(){
 
-  nextCard = pickCard();
-  if(!nextCard) return;
+  const list = getFiltered();
 
+  if(list.length===0){
+    alert("Choisis un pays");
+    return;
+  }
+
+  const c = getRandom(list);
+
+  /* reset flip AVANT */
   card.classList.remove("flip");
 
-  setTimeout(()=>{
-    current = nextCard;
-    img.src = current.img;
-    back.textContent = current.name;
-  },250);
+  /* change direct */
+  img.src = c.img;
+  back.textContent = c.name;
+
+  current = c;
 }
 
 /* BUTTONS */
 function good(){
-  if(!current) return;
-  current.weight = Math.max(1,current.weight-1);
   load();
 }
 
 function bad(){
-  if(!current) return;
-  current.weight += 2;
   load();
 }
 
-function next(){ load(); }
+function next(){
+  load();
+}
 
 card.onclick=()=>card.classList.toggle("flip");
 
