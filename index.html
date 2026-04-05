@@ -30,6 +30,7 @@ button{
 .good{background:#16a34a}
 .bad{background:#dc2626}
 
+/* MENU */
 #menu{
   display:none;
   flex-direction:column;
@@ -41,6 +42,7 @@ button{
   border-radius:10px;
 }
 
+/* CARD */
 .card{
   width:90vw;
   max-width:400px;
@@ -100,39 +102,39 @@ button{
 
 <script>
 
-/* 🔥 TA LISTE COMPLETE */
-const imageList = [
+/* 🔥 CARTES (FORMAT SIMPLE QUE TU VEUX) */
+const cards = [
 
-/* 👉 COLLE TA LISTE COMPLETE ICI */
-"T-72-1.jpg","T-72-2.jpg","T-72-3.jpg"
+/* 🇷🇺 RUSSIE */
+{img:"img-russie/T-55-1.jpg", name:"T-55", country:"Russie", weight:1},
+{img:"img-russie/T-55-2.jpg", name:"T-55", country:"Russie", weight:1},
+{img:"img-russie/T-55-3.jpg", name:"T-55", country:"Russie", weight:1},
+
+{img:"img-russie/T-62-1.jpg", name:"T-62", country:"Russie", weight:1},
+{img:"img-russie/T-62-2.jpg", name:"T-62", country:"Russie", weight:1},
+{img:"img-russie/T-62-3.jpg", name:"T-62", country:"Russie", weight:1},
+
+{img:"img-russie/T-72-1.jpg", name:"T-72", country:"Russie", weight:1},
+{img:"img-russie/T-72-2.jpg", name:"T-72", country:"Russie", weight:1},
+{img:"img-russie/T-72-3.jpg", name:"T-72", country:"Russie", weight:1},
+
+/* 🇺🇸 USA */
+{img:"img-vehicule/M1-ABRAMS-1.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
+{img:"img-vehicule/M1-ABRAMS-2.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
+{img:"img-vehicule/M1-ABRAMS-3.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
+
+{img:"img-vehicule/HUMMER-1.jpg", name:"HUMMER", country:"USA", weight:1},
+{img:"img-vehicule/HUMMER-2.jpg", name:"HUMMER", country:"USA", weight:1},
+{img:"img-vehicule/HUMMER-3.jpg", name:"HUMMER", country:"USA", weight:1}
 
 ];
 
-/* 🔥 GROUP VEHICULE */
-const vehicleGroups = {};
+/* MENU PAYS */
+const menu = document.getElementById("menu");
 
-imageList.forEach(img=>{
-  const name = img.split("-").slice(0,-1).join("-");
+const countries = [...new Set(cards.map(c=>c.country))];
 
-  if(!vehicleGroups[name]){
-    vehicleGroups[name] = [];
-  }
-
-  vehicleGroups[name].push(img);
-});
-
-/* 🌍 GROUP PAYS (léger) */
-const countryMap = {
-"Russie":["T-","BMP","BTR","BM","2S","MI","TOR","PANTSIR","TUNGUSKA"],
-"USA":["M1","HUMMER","STRYKER","AAV","LAV","APACHE","HIMARS"],
-"Europe":["LEOPARD","FUCHS","BOXER","LYNX","WIESEL","CHALLENGER","SCIMITAR","ARIETE","CENTAURO"],
-"Autres":["TYPE","K-","ZTZ","ZBD","PTL","ARJUN","ROSOMAK"]
-};
-
-/* MENU */
-const menu=document.getElementById("menu");
-
-Object.keys(countryMap).forEach(c=>{
+countries.forEach(c=>{
   const l=document.createElement("label");
   l.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
   menu.appendChild(l);
@@ -143,46 +145,21 @@ function toggleMenu(){
 }
 
 /* FILTRE */
-function getFilteredVehicles(){
+function getFiltered(){
   const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
-
-  return Object.keys(vehicleGroups).filter(name=>{
-    return selected.some(country=>{
-      return countryMap[country].some(k=>name.includes(k));
-    });
-  });
+  return cards.filter(c=>selected.includes(c.country));
 }
 
-/* 🧠 POIDS */
-let weights = {};
-
-/* RANDOM */
-function getRandomVehicle(list){
-
+/* 🧠 RANDOM INTELLIGENT */
+function getWeighted(list){
   let total=0;
-
-  list.forEach(v=>{
-    weights[v] = weights[v] || 1;
-    total += weights[v];
-  });
+  list.forEach(c=>total+=c.weight);
 
   let r=Math.random()*total;
 
-  for(let v of list){
-    if(r<weights[v]) return v;
-    r-=weights[v];
-  }
-}
-
-/* ⚡ PRELOAD */
-function preloadNext(){
-  for(let i=0;i<3;i++){
-    const names = Object.keys(vehicleGroups);
-    const v = names[Math.floor(Math.random()*names.length)];
-    const imgs = vehicleGroups[v];
-
-    const imgPre = new Image();
-    imgPre.src = "img-vehicule/" + imgs[Math.floor(Math.random()*imgs.length)];
+  for(let c of list){
+    if(r<c.weight) return c;
+    r-=c.weight;
   }
 }
 
@@ -193,34 +170,29 @@ function load(){
 
   card.classList.remove("flip");
 
-  const filtered = getFilteredVehicles();
+  const list = getFiltered();
 
-  if(filtered.length===0){
+  if(list.length===0){
     alert("Choisis un pays");
     return;
   }
 
-  const v = getRandomVehicle(filtered);
-  const imgs = vehicleGroups[v];
+  const c = getWeighted(list);
 
-  const imgFile = imgs[Math.floor(Math.random()*imgs.length)];
+  img.src = c.img;
+  back.textContent = c.name;
 
-  img.src = "img-vehicule/" + imgFile;
-  back.textContent = v;
-
-  current = v;
-
-  preloadNext();
+  current = c;
 }
 
 /* BUTTONS */
 function good(){
-  weights[current] = Math.max(1,(weights[current]||1)-1);
+  current.weight = Math.max(1,current.weight-1);
   load();
 }
 
 function bad(){
-  weights[current] = (weights[current]||1)+2;
+  current.weight += 2;
   load();
 }
 
