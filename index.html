@@ -30,7 +30,6 @@ button{
 .good{background:#16a34a}
 .bad{background:#dc2626}
 
-/* MENU */
 #menu{
   display:none;
   flex-direction:column;
@@ -126,10 +125,6 @@ const cards = [
 {img:"img-vehicule/T-90-2.jpg", name:"T-90", country:"Russie", weight:1},
 {img:"img-vehicule/T-90-3.jpg", name:"T-90", country:"Russie", weight:1},
 
-{img:"img-vehicule/BMP-1-1.jpg", name:"BMP-1", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-2-1.jpg", name:"BMP-2", country:"Russie", weight:1},
-{img:"img-vehicule/BMP-3-1.jpg", name:"BMP-3", country:"Russie", weight:1},
-
 /* 🇺🇸 USA */
 {img:"img-vehicule/M1-ABRAMS-1.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
 {img:"img-vehicule/M1-ABRAMS-2.jpg", name:"M1-ABRAMS", country:"USA", weight:1},
@@ -141,18 +136,7 @@ const cards = [
 
 {img:"img-vehicule/STRYKER-1.jpg", name:"STRYKER", country:"USA", weight:1},
 {img:"img-vehicule/STRYKER-2.jpg", name:"STRYKER", country:"USA", weight:1},
-{img:"img-vehicule/STRYKER-3.jpg", name:"STRYKER", country:"USA", weight:1},
-
-{img:"img-vehicule/HIMARS-1.jpg", name:"HIMARS", country:"USA", weight:1},
-
-/* 🇩🇪 ALLEMAGNE */
-{img:"img-vehicule/LEOPARD-2-1.jpg", name:"LEOPARD-2", country:"Allemagne", weight:1},
-{img:"img-vehicule/FUCHS-1.jpg", name:"FUCHS", country:"Allemagne", weight:1},
-{img:"img-vehicule/BOXER-1.jpg", name:"BOXER", country:"Allemagne", weight:1},
-
-/* 🇬🇧 UK */
-{img:"img-vehicule/CHALLENGER-2-1.jpg", name:"CHALLENGER-2", country:"UK", weight:1},
-{img:"img-vehicule/SCIMITAR-1.jpg", name:"SCIMITAR", country:"UK", weight:1}
+{img:"img-vehicule/STRYKER-3.jpg", name:"STRYKER", country:"USA", weight:1}
 
 ];
 
@@ -199,49 +183,53 @@ function getWeighted(list){
   }
 }
 
-/* LOAD */
+/* 🔥 SYSTEME ANTI FREEZE */
 let current;
+let nextCard;
+
+function pickCard(){
+  const list = getFiltered();
+  if(list.length===0){
+    alert("Choisis un pays");
+    return null;
+  }
+  return getWeighted(list);
+}
 
 function load(){
 
-  const list = getFiltered();
+  nextCard = pickCard();
+  if(!nextCard) return;
 
-  if(list.length===0){
-    alert("Choisis un pays");
-    return;
-  }
-
-  const c = getWeighted(list);
-
-  current = c;
-
-  /* 🔥 ON RETOURNE LA CARTE */
   card.classList.remove("flip");
 
-  /* 🔥 ON ATTEND AVANT DE CHANGER */
   setTimeout(()=>{
-
-    img.src = c.img;
-    back.textContent = c.name;
-
-  }, 250); // 👈 important
-}
-  const c = getWeighted(list);
-
-  img.src = c.img;
-  back.textContent = c.name;
-
-  current = c;
+    current = nextCard;
+    img.src = current.img;
+    back.textContent = current.name;
+  },250);
 }
 
-/* FIX FLIP */
+/* BUTTONS */
 function good(){
+  if(!current) return;
   current.weight = Math.max(1,current.weight-1);
   load();
 }
 
 function bad(){
+  if(!current) return;
   current.weight += 2;
   load();
 }
-function next(){
+
+function next(){ load(); }
+
+card.onclick=()=>card.classList.toggle("flip");
+
+setTimeout(next,100);
+
+</script>
+
+</body>
+</html>
