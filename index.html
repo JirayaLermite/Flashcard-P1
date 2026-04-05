@@ -204,8 +204,6 @@ let current;
 
 function load(){
 
-  card.classList.remove("flip");
-
   const list = getFiltered();
 
   if(list.length===0){
@@ -213,6 +211,21 @@ function load(){
     return;
   }
 
+  const c = getWeighted(list);
+
+  current = c;
+
+  /* 🔥 ON RETOURNE LA CARTE */
+  card.classList.remove("flip");
+
+  /* 🔥 ON ATTEND AVANT DE CHANGER */
+  setTimeout(()=>{
+
+    img.src = c.img;
+    back.textContent = c.name;
+
+  }, 250); // 👈 important
+}
   const c = getWeighted(list);
 
   img.src = c.img;
@@ -224,14 +237,11 @@ function load(){
 /* FIX FLIP */
 function good(){
   current.weight = Math.max(1,current.weight-1);
-  card.classList.remove("flip");
-  setTimeout(load,300);
+  load();
 }
 
 function bad(){
   current.weight += 2;
-  card.classList.remove("flip");
-  setTimeout(load,300);
+  load();
 }
-
 function next(){
